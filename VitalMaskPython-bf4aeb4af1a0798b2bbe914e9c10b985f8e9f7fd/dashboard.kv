@@ -1,0 +1,717 @@
+#:import Factory kivy.factory.Factory
+#:set header_font "20dp"
+#:set input_font "15dp"
+#:set title_font "40dp"
+
+#:set app.textColor (.9,.97,.95,1)
+
+#:set input_height "20dp"
+#:set header_height "30dp"
+#:set header_height2 "45dp"
+
+<FlatButton@ButtonBehavior+Label>:
+    font_size: dp(20)
+
+# <MyOption@Button>:
+#     background_normal: ''
+#     background_color: app.bgColor3
+#     size_hint: None, None
+
+<HeaderButton@Button>:
+    image_source: ''
+    subtext: ''
+    BoxLayout:
+        height: self.parent.height
+        width: self.parent.width
+        pos: self.parent.pos
+        Label:
+            size_hint_x: .5
+            halign: 'center'
+            text: root.subtext
+        Image:
+            size_hint_x: .1
+            halign: 'center'
+            source: root.image_source
+<IconButton@ButtonBehavior+Image>:
+    color: app.textColor
+
+<Button>:
+    font_size: dp(15)
+    color: app.textColor
+    background_normal: ''
+    background_color: app.accentColor2
+
+<Label>:
+    font_size: dp(15)
+    color: app.textColor
+
+<Spinner>:
+    font_size: dp(15)
+    sync_height: True
+    background_disabled_normal:'atlas://data/images/defaulttheme/button_disabled'
+    disabled_color: app.bgColor4
+    # option_cls: Factory.get("MyOption")
+    # color: app.textColor
+
+<TextInput>:
+    font_size: dp(15)
+    multiline: False
+    cursor_color: app.textColor
+    background_color: app.bgColor3
+    foreground_color: app.textColor
+    padding:[0,0,0,0]
+    background_normal:''
+    background_active:''
+    hint_text: '-'
+    hint_text_color: app.textColor
+    halign: 'center'
+    padding_y: [7,0]
+
+<SettingsTextInput@TextInput>:
+    font_size: dp(15)
+    multiline: False
+    cursor_color: app.textColor
+    background_color: app.bgColor3
+    foreground_color: app.textColor
+    padding:[0,0,0,0]
+    background_normal:''
+    background_disabled_normal:'atlas://data/images/defaulttheme/button_disabled'
+    disabled_foreground_color: app.bgColor4
+    background_active:''
+    hint_text: '-'
+    hint_text_Color: app.textColor
+    halign: 'center'
+
+<SaveDialog>:
+    text_input: text_input
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            on_selection: text_input.text = self.selection and self.selection[0] or ''
+            dirselect: True
+
+        TextInput:
+            id: text_input
+            size_hint_y: None
+            height: 30
+            multiline: False
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            Button:
+                text: "Set Save Directory/File"
+                on_release: root.save(filechooser.path, text_input.text)
+
+
+<DashboardWindow>:
+    id: main_win
+    orientation: 'vertical'
+    
+#    _    _                _           
+#   | |  | |              | |          
+#   | |__| | ___  __ _  __| | ___ _ __ 
+#   |  __  |/ _ \/ _` |/ _` |/ _ \ '__|
+#   | |  | |  __/ (_| | (_| |  __/ |   
+#   |_|  |_|\___|\__,_|\__,_|\___|_|   
+
+    BoxLayout:
+        id: header
+        size_hint_min_y: 50
+        size_hint_max_y: 50
+        size_hint_y: .05
+        padding: 8
+        canvas.before:
+            Color:
+                rgba: app.bgColor2
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        Image:
+            size_hint_x: .05
+            halign: 'right'
+            valign: 'center'
+            source: 'png/logo_white.png'
+        Label: 
+            size_hint_x: .9
+            text: 'VitalMask Desktop'
+            font_size: header_font
+            text_size: self.size
+            valign: "bottom"
+            padding_x: 20
+            color: app.textColor
+        FlatButton:
+            id: loggedin_user
+            text: ''
+            color: app.accentColor1
+
+    # Contains everything below header.  
+    # Used to create even spacing around children
+    BoxLayout:
+        padding: 10
+
+        # Contains mask panel and settings panel
+        BoxLayout:
+            canvas.before:
+                Color:
+                    rgba: app.bgColor2
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            id: mask_details
+            orientation: 'horizontal'
+            size_hint_x: .8
+            spacing: 10
+
+            # Contains mask table and section to add masks
+            BoxLayout:
+                id: mask_details
+                orientation: 'vertical'
+                size_hint_x: .8
+                spacing: 10
+
+#                            _     _   __  __           _    
+#                   /\      | |   | | |  \/  |         | |   
+#                  /  \   __| | __| | | \  / | __ _ ___| | __
+#                 / /\ \ / _` |/ _` | | |\/| |/ _` / __| |/ /
+#                / ____ \ (_| | (_| | | |  | | (_| \__ \   < 
+#               /_/    \_\__,_|\__,_| |_|  |_|\__,_|___/_|\_\
+                                                                                     
+                BoxLayout:
+                    id: mask_labels
+                    size_hint_y: .07
+                    size_hint_min_y: header_height
+                    size_hint_max_y: header_height
+                    canvas.before:
+                        Color:
+                            rgba: app.accentColor1
+                        RoundedRectangle:
+                            radius: [(10, 10), (10, 10), (0, 0), (0, 0)]
+                            size: self.size
+                            pos: self.pos
+                    # FlatButton:
+                        # text: 'Mask ID'
+                        # size_hint_x: .1
+                        # color: app.textColor
+                    BoxLayout:
+                        size_hint_x: .2
+                        padding: (1,1.5,5,1.5)
+                        FlatButton:
+                            text: 'Bluetooth'
+                            color: app.textColor
+                        Button:
+                            id: rescan_button
+                            color: app.textColor
+                            size_hint_x: dp(32)/self.parent.width
+                            # background_normal: ''
+                            # background_color: app.accentColor2
+                            # background_disabled: app.bgColor3
+                            on_press: root.see_addresses()
+                            Image:
+                                width: self.parent.width
+                                height: self.parent.height
+                                pos: self.parent.pos
+                                allow_stretch: True
+                                source: 'png/scan_24dp.png'
+                    FlatButton:
+                        text: 'COVID-19'
+                        size_hint_x: .1
+                        color: app.textColor
+                    FlatButton:
+                        text: 'AVPU Score'
+                        size_hint_x: .1
+                        color: app.textColor
+                    FlatButton:
+                        text: 'Age'
+                        size_hint_x: .1
+                        color: app.textColor
+                    FlatButton:
+                        text: 'Sex'
+                        size_hint_x: .1
+                        color: app.textColor
+                    FlatButton:
+                        text: ''
+                        size_hint_x: .1
+                        color: app.textColor
+                BoxLayout:
+                    id: mask_inputs
+                    size_hint_y: .07
+                    size_hint_min_y: header_height
+                    size_hint_max_y: header_height
+                    spacing: 5
+                    #TextInput:
+                        #id: mask_num_inp
+                        #size_hint_x: .1
+                        ## on_text_validate: root.update_masks()
+                    Spinner:
+                        id: addr_spinner
+                        size_hint_x: .2
+                        height:30
+                        background_normal: ''
+                        background_color: app.bgColor3
+                        color: app.textColor
+                        # pos_hint: {'center': (.5, .5)}
+                        text: '-'
+                        # TODO: Remove next line for release
+                        # values: '00:SI:MU:LA:TE:00',
+                        # on_value:
+                        #     print: "The spinner {} has text {}".format(self, self.value)
+                    Spinner:
+                        id: pui_spinner
+                        size_hint_x: .1
+                        height:30
+                        background_normal: ''
+                        background_color: app.bgColor3
+                        color: app.textColor
+                        # pos_hint: {'center': (.5, .5)}
+                        text: '-'
+                        values: 'Positive', 'Suspected', 'Unlikely', 'Negative'
+                        # on_value: root.update_masks()
+                    Spinner:
+                        id: avpu_spinner
+                        size_hint_x: .1
+                        height:30
+                        background_normal: ''
+                        background_color: app.bgColor3
+                        color: app.textColor
+                        # pos_hint: {'center': (.5, .5)}
+                        text: '-'
+                        values: 'Alert', 'Reacts to Voice', 'Reacts to Pain', 'Unresponsive'
+                        # on_value: root.update_masks()
+                    TextInput:
+                        id: age_inp
+                        size_hint_x: .1
+                        # on_text_validate: root.update_masks()
+                    Spinner:
+                        id: sex_spinner
+                        size_hint_x: .1
+                        height:30
+                        background_normal: ''
+                        background_color: app.bgColor3
+                        color: app.textColor
+                        # pos_hint: {'center': (.5, .5)}
+                        text: '-'
+                        values: 'Female', 'Male'
+                        # on_value:
+                        #     print: "The spinner {} has text {}".format(self, self.value)
+                    Button:
+                        text: 'Add Mask'
+                        size_hint_x: .1
+                        on_release: root.add_mask()
+                        height:30
+
+#                 _______    _     _      
+#                |__   __|  | |   | |     
+#                   | | __ _| |__ | | ___ 
+#                   | |/ _` | '_ \| |/ _ \
+#                   | | (_| | |_) | |  __/
+#                   |_|\__,_|_.__/|_|\___|
+                          
+                BoxLayout:
+                    id: add_mask
+                    orientation: 'vertical'
+                    BoxLayout:
+                        size_hint_y: .07
+                        size_hint_min_y: header_height
+                        size_hint_max_y: header_height
+                        canvas.before:
+                            Color:
+                                rgba: app.accentColor1
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        HeaderButton:
+                            subtext: 'Mask ID'
+                            id: sort_id_button
+                            # For some reason if I don't hard-code this (bgColor1 btw) the app breaks??? 
+                            frame_color: (1,1,1,1)
+                            canvas.after:
+                                Color:
+                                    rgba: self.frame_color
+                                Line:
+                                    width: 1
+                                    rectangle: self.x+1, self.y+1, self.width-2, self.height-2
+                            size_hint_x: .1
+                            background_color: app.accentColor1
+                            border: (16,16,16,16)
+                            color: app.textColor
+                            on_press: root.sort_by_id_func(self)
+                            image_source: 'png/arrow_up_18dp.png'
+                        HeaderButton:
+                            text: 'Priority'
+                            id: sort_priority_button
+                            # But if I leave THIS as a variable, it's okay??????
+                            frame_color: (0, 0, 0, 1)
+                            canvas.after:
+                                Color:
+                                    rgba: self.frame_color
+                                Line:
+                                    width: 1
+                                    rectangle: self.x+1, self.y+1, self.width-2, self.height-2
+                            size_hint_x: .1
+                            background_color: app.accentColor1
+                            border: (16,16,16,16)
+                            color: app.textColor
+                            on_press: root.sort_by_priority_func(self)
+                            image_source: 'png/arrow_down_black_18dp.png'
+                        Label:
+                            text: 'Status'
+                            size_hint_x: .1
+                            color: app.textColor
+                        Label:
+                            text: 'COVID-19'
+                            size_hint_x: .075
+                            color: app.textColor
+                        Label:
+                            text: 'Age'
+                            size_hint_x: .075
+                            color: app.textColor
+                        Label:
+                            text: 'Sex'
+                            size_hint_x: .1
+                            color: app.textColor
+                        Label:
+                            text: 'SpO2 (%)'
+                            size_hint_x: .1
+                            color: app.textColor
+                        Label:
+                            text: 'HR (bpm)'
+                            size_hint_x: .1
+                            color: app.textColor
+                        Label:
+                            text: 'RR (rpm)'
+                            size_hint_x: .1
+                            color: app.textColor
+                        Label:
+                            text: 'Temp (F)'
+                            size_hint_x: .1
+                            color: app.textColor
+                    GridLayout:
+                        padding: (0, 10, 0, 0)
+                        id: masks
+                        cols: 1
+
+            # Spacer between mask table and mask settings panels
+            # BoxLayout:
+            #     size_hint_x: None
+            #     width: 1
+            #     canvas.before:
+            #         Color:
+            #             rgba: app.bgColor3
+            #         Rectangle:
+            #             size: self.size
+            #             pos: self.pos 
+
+#             _____      _   _   _                 
+#            / ____|    | | | | (_)                
+#           | (___   ___| |_| |_ _ _ __   __ _ ___ 
+#            \___ \ / _ \ __| __| | '_ \ / _` / __|
+#            ____) |  __/ |_| |_| | | | | (_| \__ \
+#           |_____/ \___|\__|\__|_|_| |_|\__, |___/
+#                                         __/ |    
+#                                        |___/     
+            BoxLayout:
+                spacing: 10
+                orientation: 'vertical'
+                size_hint_x: .19
+                
+                BoxLayout:
+                    size_hint_y: .07
+                    size_hint_min_y: header_height
+                    size_hint_max_y: header_height
+                    canvas.before:
+                        Color:
+                            rgba: app.accentColor1
+                        RoundedRectangle:
+                            radius: [(10, 10), (10, 10), (0, 0), (0, 0)]
+                            size: self.size
+                            pos: self.pos  
+                    Label:
+                        text: 'Mask Settings'
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: .066
+                    size_hint_min_y: header_height
+                    size_hint_max_y: header_height
+                    padding: (10,0,10,0)
+                    Label:
+                        id: settings_mask
+                        color: app.textColor
+                        text: 'Mask ID: ' 
+                    Label:
+                        id: settings_mask_num
+                        color: app.textColor
+                        text: 'N/A' 
+
+                BoxLayout:
+                    size_hint_y: .05
+                    size_hint_min_y: input_height
+                    size_hint_max_y: input_height
+                    padding: (10,0,10,0)
+                    spacing: 5
+                    Label:
+                        color: app.textColor
+                        size_hint_x: .33
+                        text: 'COVID'
+                    Spinner:
+                        id: settings_pui_spinner
+                        size_hint_x: .66
+                        height:30
+                        background_normal: ''
+                        background_color: app.bgColor3
+                        color: app.textColor
+                        text: '-'
+                        values: '-','Positive', 'Suspected', 'Unlikely', 'Negative'
+                        disabled: True
+                BoxLayout:
+                    size_hint_y: .05
+                    size_hint_min_y: input_height
+                    size_hint_max_y: input_height
+                    padding: (10,0,10,0)
+                    spacing: 5
+                    Label:
+                        color: app.textColor
+                        size_hint_x: .33
+                        text: 'AVPU Score'
+                    Spinner:
+                        id: settings_avpu_spinner
+                        size_hint_x: .66
+                        height:30
+                        background_normal: ''
+                        background_color: app.bgColor3
+                        color: app.textColor
+                        text: '-'
+                        values: '-','Alert', 'Reacts to Voice', 'Reacts to Pain', 'Unresponsive'
+                        disabled: True
+                BoxLayout:
+                    size_hint_y: .05
+                    size_hint_min_y: input_height
+                    size_hint_max_y: input_height
+                    padding: (10,0,10,0)
+                    spacing: 5
+                    Label:
+                        color: app.textColor
+                        size_hint_x: .33
+                        text: 'Age'
+                    SettingsTextInput:
+                        id: settings_age_inp
+                        size_hint_x: .66
+                        disabled: True
+                BoxLayout:
+                    size_hint_y: .05
+                    size_hint_min_y: input_height
+                    size_hint_max_y: input_height
+                    padding: (10,0,10,0)
+                    spacing: 5
+                    Label:
+                        color: app.textColor
+                        size_hint_x: .33
+                        text: 'Sex'
+                    Spinner:
+                        id: settings_sex_spinner
+                        size_hint_x: .66
+                        height:30
+                        background_normal: ''
+                        background_color: app.bgColor3
+                        color: app.textColor
+                        text: '-'
+                        values: '-','Female', 'Male'
+                        disabled: True
+                Label:
+                    size_hint_y: .066
+                    size_hint_min_y: header_height
+                    size_hint_max_y: header_height
+                    color: app.textColor
+                    text: 'Alarm Thresholds' 
+                BoxLayout:
+                    size_hint_y: .066
+                    size_hint_min_y: input_height
+                    size_hint_max_y: input_height
+                    padding: (10,0,10,0)
+                    spacing: 5
+                    Label:
+                        color: app.textColor
+                        size_hint_x: .33
+                        text: 'SpO2'
+                    SettingsTextInput:
+                        id: settings_min_spo2
+                        hint_text: 'Min'
+                        size_hint_x: .33
+                        disabled: True
+                    SettingsTextInput:
+                        id: settings_max_spo2
+                        hint_text: 'Max'
+                        size_hint_x: .33
+                        disabled: True
+                BoxLayout:
+                    size_hint_y: .066
+                    size_hint_min_y: input_height
+                    size_hint_max_y: input_height
+                    padding: (10,0,10,0)
+                    spacing: 5
+                    Label:
+                        color: app.textColor
+                        size_hint_x: .33
+                        text: 'HR'
+                    SettingsTextInput:
+                        id: settings_min_hr
+                        hint_text: 'Min'
+                        size_hint_x: .33
+                        disabled: True
+                    SettingsTextInput:
+                        id: settings_max_hr
+                        hint_text: 'Max'
+                        size_hint_x: .33
+                        disabled: True
+                BoxLayout:
+                    size_hint_y: .066
+                    size_hint_min_y: input_height
+                    size_hint_max_y: input_height
+                    padding: (10,0,10,0)
+                    spacing: 5
+                    Label:
+                        color: app.textColor
+                        size_hint_x: .33
+                        text: 'RR'
+                    SettingsTextInput:
+                        id: settings_min_rr
+                        hint_text: 'Min'
+                        size_hint_x: .33
+                        disabled: True
+                    SettingsTextInput:
+                        id: settings_max_rr
+                        hint_text: 'Max'
+                        size_hint_x: .33
+                        disabled: True
+                BoxLayout:
+                    size_hint_y: .066
+                    size_hint_min_y: input_height
+                    size_hint_max_y: input_height
+                    padding: (10,0,10,0)
+                    spacing: 5
+                    Label:
+                        color: app.textColor
+                        size_hint_x: .33
+                        text: 'Temp'
+                    SettingsTextInput:
+                        id: settings_min_temp
+                        hint_text: 'Min'
+                        size_hint_x: .33
+                        disabled: True
+                    SettingsTextInput:
+                        id: settings_max_temp
+                        hint_text: 'Max'
+                        size_hint_x: .33
+                        disabled: True
+                BoxLayout:
+                    size_hint_y: .1
+                    size_hint_min_y: dp(90)
+                    size_hint_max_y: dp(90)
+                    orientation: 'vertical'
+                    padding: (10,10,10,10)
+                    spacing: 10
+                    Button:
+                        id: None
+                        text: 'Update Mask'
+                        height: header_height
+                        on_press: root.on_mask_update()
+                    Button:
+                        text: 'Delete Mask'
+                        # canvas.after:
+                        #     Color:
+                        #         rgba: app.redColor
+                        #     Line:
+                        #         width: 1
+                        #         rectangle: self.x+1, self.y+1, self.width-2, self.height-2
+                        height: header_height
+                        background_color: app.bgColor3
+                        on_press: root.on_mask_delete()
+                # Label:
+                #     size_hint_y: .02
+                #     size_hint_min_y: .1
+                #     size_hint_max_y: .1
+                #     text: ''
+
+                BoxLayout:
+                    size_hint_y: .07
+                    size_hint_min_y: header_height
+                    size_hint_max_y: header_height
+                    canvas.before:
+                        Color:
+                            rgba: app.accentColor1
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos  
+                    Label:
+                        text: 'General Settings'
+
+                BoxLayout:
+                    size_hint_y: .033
+                    size_hint_min_y: header_height2
+                    size_hint_max_y: header_height2
+                    orientation: 'vertical'
+                    spacing: 10
+                    padding: (10,0,10,0)
+                    Label:
+                        color: app.textColor
+                        size_hint_y: .33
+                        text: 'Vitals Percent Change Period'
+                    Spinner:
+                        id: settings_delta_spinner
+                        size_hint_y: .66
+                        background_normal: ''
+                        background_color: app.bgColor3
+                        color: app.textColor
+                        text: '10 min'
+                        values: '4 min','10 min', '30 min', '1 hr', '2 hr', '4 hr'
+
+                BoxLayout:
+                    size_hint_y: .033
+                    size_hint_min_y: header_height2
+                    size_hint_max_y: header_height2
+                    orientation: 'vertical'
+                    spacing: 10
+                    padding: (10,0,10,0)
+                    Label:
+                        color: app.textColor
+                        size_hint_y: .33
+                        text: 'Priority Scoring Method'
+                    Spinner:
+                        id: settings_priority_spinner
+                        size_hint_y: .66
+                        background_normal: ''
+                        background_color: app.bgColor3
+                        color: app.textColor
+                        text: 'NEWS'
+                        values: 'NEWS','# Abnormal Vitals'
+
+                BoxLayout:
+                    size_hint_y: .033
+                    size_hint_min_y: header_height2
+                    size_hint_max_y: header_height2
+                    orientation: 'vertical'
+                    spacing: 10
+                    Label:
+                        size_hint_y: .5
+                        text: 'Volume ' + str(slider_volume.value)
+                        color: app.textColor
+                    Slider:
+                        id: slider_volume 
+                        size_hint_y: .5
+                        min: 0
+                        max: 100
+                        value: 50
+                        step: 1
+                        value_track: True
+                        value_track_color: app.accentColor1
+
+
+
+                BoxLayout:
+                    size_hint_y: .05
+
+
